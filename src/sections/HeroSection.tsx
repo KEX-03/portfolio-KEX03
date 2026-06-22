@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import heroPortrait from "@/assets/images/IMG_0959.jpeg";
+import heroPortrait from "@/assets/images/IMG_1897.jpeg";
 
 const NAV_ITEMS = [
   { label: "Home", href: "#home" },
