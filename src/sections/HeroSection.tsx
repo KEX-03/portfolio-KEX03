@@ -219,15 +219,16 @@ export function HeroSection() {
             <div className="tape t2" />
             <img className="img" src={heroPortrait} alt="Vivek Sharma portrait" />
           </div>
+          
+          <div className="me-arrow">
+            <span className="a">↗</span> that&apos;s me!
+          </div>
 
           <div className="code-card">
             <div id="typed" dangerouslySetInnerHTML={{ __html: typedHtml }} />
             <span className="caret" />
           </div>
 
-          <div className="me-arrow">
-            <span className="a">↗</span> that&apos;s me!
-          </div>
         </div>
       </section>
     </>

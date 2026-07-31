@@ -124,7 +124,8 @@ export function ContactProcessSection() {
           Great ideas
           <br />
           start with
-          <br />a message.
+          <br />
+          a message.
           <span className="smile">☺</span>
         </div>
       </section>
@@ -135,10 +136,6 @@ export function ContactProcessSection() {
           <span className="blip" /> Now: building something with Framer Motion
         </span>
       </footer>
-
-      <div className="toast" id="toast">
-        ✦ you found a secret — recruiter mode activated
-      </div>
     </>
   );
 }

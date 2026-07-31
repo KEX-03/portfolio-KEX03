@@ -1493,7 +1493,7 @@ h1.name .hl:nth-of-type(2)::before {
 .connect-social-column {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 14px;
 }
 
@@ -2065,7 +2065,7 @@ footer .now .blip {
   }
 
   .note {
-    width: 100%;
+    width: 160px;
     justify-self: stretch;
   }
 
@@ -2098,7 +2098,7 @@ footer .now .blip {
   }
 
   .note {
-    width: 100%;
+    width: 160px;
   }
 
   .process .steps {
