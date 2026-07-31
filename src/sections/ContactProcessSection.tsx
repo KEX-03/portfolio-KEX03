@@ -88,7 +88,7 @@ export function ContactProcessSection() {
                 <path d="m3 7 9 7 9-7" />
               </svg>
             </span>
-            vvk.shrma.03@gmail.com
+            viveksharma03@yahoo.com
           </div>
           <div className="info-line">
             <span className="ic">
@@ -97,7 +97,7 @@ export function ContactProcessSection() {
                 <circle cx="12" cy="10" r="3" />
               </svg>
             </span>
-            Based in Chandigarh, India
+            Based in Bangalore, India
           </div>
         </div>
         <div className="connect-social-column">
@@ -134,7 +134,6 @@ export function ContactProcessSection() {
         <span className="now">
           <span className="blip" /> Now: building something with Framer Motion
         </span>
-        <span>↑ Try the konami code</span>
       </footer>
 
       <div className="toast" id="toast">

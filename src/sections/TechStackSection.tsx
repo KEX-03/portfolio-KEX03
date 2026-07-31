@@ -47,11 +47,11 @@ export function TechStackSection() {
       >
         <div className="mq" ref={bandRef}>
           <span>
-            Available for work <span className="star">{"\u2726"}</span> Frontend Engineer <span className="star">{"\u2726"}</span> React {"\u00B7"} TypeScript {"\u00B7"} Motion <span className="star">{"\u2726"}</span> Currently in Chandigarh{" "}
+            Available for work <span className="star">{"\u2726"}</span> Frontend Engineer <span className="star">{"\u2726"}</span> React {"\u00B7"} TypeScript {"\u00B7"} Motion <span className="star">{"\u2726"}</span> Currently in Bangalore{" "}
             <span className="star">{"\u2726"}</span> Let&apos;s build something <span className="star">{"\u2726"}</span>
           </span>
           <span>
-            Available for work <span className="star">{"\u2726"}</span> Frontend Engineer <span className="star">{"\u2726"}</span> React {"\u00B7"} TypeScript {"\u00B7"} Motion <span className="star">{"\u2726"}</span> Currently in Chandigarh{" "}
+            Available for work <span className="star">{"\u2726"}</span> Frontend Engineer <span className="star">{"\u2726"}</span> React {"\u00B7"} TypeScript {"\u00B7"} Motion <span className="star">{"\u2726"}</span> Currently in Bangalore{" "}
             <span className="star">{"\u2726"}</span> Let&apos;s build something <span className="star">{"\u2726"}</span>
           </span>
         </div>
