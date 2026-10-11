@@ -16,7 +16,9 @@ export function MenuBar() {
     <header className="menubar">
       <nav className="menubar-left" aria-label="Primary">
         <Link to="/" className="menubar-logo" aria-label="Home">
-          <span aria-hidden="true">✦</span>
+          <span className="menubar-mono" aria-hidden="true">
+            vs
+          </span>
         </Link>
         <span className="menubar-app">{app.appName}</span>
         <ul className="menubar-links">

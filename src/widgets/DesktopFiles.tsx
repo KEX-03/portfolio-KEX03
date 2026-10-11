@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useRef, useState, type RefObject } from "react";
 import { useNavigate } from "react-router-dom";
-import { AnimatePresence, motion } from "framer-motion";
-import { FileText, Folder, Hand, X } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { FileText, Folder, X } from "lucide-react";
 import portrait from "@/assets/images/IMG_1897.jpeg";
 import avatar from "@/assets/images/IMG_4657.jpeg";
 import { SITE } from "@/data/site";
+import { DragTip } from "./DragTip";
 
 /**
  * Icons on the desktop. To add a photo, drop it in src/assets/images and add an
@@ -65,6 +66,16 @@ export function DesktopFiles({ constraintsRef }: DesktopFilesProps) {
   const [preview, setPreview] = useState<Extract<DesktopFile, { kind: "image" }> | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const draggedRef = useRef(false);
+  const reduce = useReducedMotion();
+  const [discovered, setDiscovered] = useState(false);
+  const [nudge, setNudge] = useState(false);
+
+  // After the tip goes away, wiggle the icons once so it is obvious which things it meant.
+  const onTipDismiss = useCallback(() => {
+    if (reduce) return;
+    setNudge(true);
+    window.setTimeout(() => setNudge(false), 1400);
+  }, [reduce]);
 
   useEffect(() => {
     if (!preview) return;
@@ -83,7 +94,7 @@ export function DesktopFiles({ constraintsRef }: DesktopFilesProps) {
   return (
     <>
       <div className="desktop-files">
-        {FILES.map((file) => (
+        {FILES.map((file, index) => (
           <motion.button
             key={file.name}
             type="button"
@@ -93,8 +104,11 @@ export function DesktopFiles({ constraintsRef }: DesktopFilesProps) {
             dragMomentum={false}
             dragElastic={0.08}
             whileDrag={{ scale: 1.06, zIndex: 30 }}
+            animate={nudge ? { rotate: [0, -7, 6, -4, 3, 0] } : { rotate: 0 }}
+            transition={{ rotate: { duration: 0.6, delay: nudge ? index * 0.08 : 0 } }}
             onDragStart={() => {
               draggedRef.current = true;
+              setDiscovered(true);
               setSelected(file.name);
             }}
             onClick={() => {
@@ -112,12 +126,9 @@ export function DesktopFiles({ constraintsRef }: DesktopFilesProps) {
             <span className="file-name">{file.name}</span>
           </motion.button>
         ))}
-        {canDrag ? (
-          <p className="drag-hint">
-            <Hand size={12} strokeWidth={2.2} /> psst… try dragging things
-          </p>
-        ) : null}
       </div>
+
+      {canDrag ? <DragTip discovered={discovered} onDismiss={onTipDismiss} /> : null}
 
       <AnimatePresence>
         {preview ? (
