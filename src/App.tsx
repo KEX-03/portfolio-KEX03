@@ -10,7 +10,7 @@ const ProjectsPage = lazy(() => import("@/pages/ProjectsPage").then((m) => ({ de
 const ExperiencePage = lazy(() => import("@/pages/ExperiencePage").then((m) => ({ default: m.ExperiencePage })));
 const OpenSourcePage = lazy(() => import("@/pages/OpenSourcePage").then((m) => ({ default: m.OpenSourcePage })));
 
-export function DesktopRoutes() {
+function DesktopRoutes() {
   const location = useLocation();
 
   return (
