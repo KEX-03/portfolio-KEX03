@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Smile, X } from "lucide-react";
 
-const SEEN_KEY = "kex03-drag-tip-seen";
+const SEEN_KEY = "kex03-drag-tip-seen-v2";
 const SHOW_AFTER_MS = 1600;
 const AUTO_HIDE_MS = 7000;
 
@@ -23,6 +23,16 @@ function markSeen() {
   }
 }
 
+function usePageVisible() {
+  const [visible, setVisible] = useState(() => !document.hidden);
+  useEffect(() => {
+    const onChange = () => setVisible(!document.hidden);
+    document.addEventListener("visibilitychange", onChange);
+    return () => document.removeEventListener("visibilitychange", onChange);
+  }, []);
+  return visible;
+}
+
 type DragTipProps = {
   /** Set once the visitor has dragged something themselves, so the tip is no longer needed. */
   discovered: boolean;
@@ -30,35 +40,42 @@ type DragTipProps = {
   onDismiss: () => void;
 };
 
-/** A one-time macOS-style Finder notification pointing out that desktop files can be dragged. */
+/**
+ * A macOS-style Finder notification pointing out that desktop files can be dragged.
+ * It only counts as seen once the visitor closes it or drags a file; if it times out
+ * unnoticed, it comes back on the next visit.
+ */
 export function DragTip({ discovered, onDismiss }: DragTipProps) {
-  const [visible, setVisible] = useState(false);
+  const [phase, setPhase] = useState<"waiting" | "showing" | "done">("waiting");
+  const [hovered, setHovered] = useState(false);
+  const pageVisible = usePageVisible();
 
+  // Only start the countdown while the tab is actually in front of the visitor.
   useEffect(() => {
-    if (hasSeen()) return;
-    const timer = window.setTimeout(() => setVisible(true), SHOW_AFTER_MS);
+    if (phase !== "waiting" || !pageVisible || hasSeen()) return;
+    const timer = window.setTimeout(() => setPhase("showing"), SHOW_AFTER_MS);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [phase, pageVisible]);
 
   // Once they have dragged something themselves, the tip has done its job.
-  const show = visible && !discovered;
+  const show = phase === "showing" && !discovered;
 
+  // Auto-hide pauses while hovered or while the tab is in the background.
   useEffect(() => {
-    if (!show) return;
+    if (!show || hovered || !pageVisible) return;
     const timer = window.setTimeout(() => {
-      setVisible(false);
-      markSeen();
+      setPhase("done");
       onDismiss();
     }, AUTO_HIDE_MS);
     return () => window.clearTimeout(timer);
-  }, [show, onDismiss]);
+  }, [show, hovered, pageVisible, onDismiss]);
 
   useEffect(() => {
     if (discovered) markSeen();
   }, [discovered]);
 
   const dismiss = () => {
-    setVisible(false);
+    setPhase("done");
     markSeen();
     onDismiss();
   };
@@ -69,6 +86,8 @@ export function DragTip({ discovered, onDismiss }: DragTipProps) {
         <motion.div
           className="mac-notif"
           role="status"
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
           initial={{ opacity: 0, x: 380 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: 380 }}
