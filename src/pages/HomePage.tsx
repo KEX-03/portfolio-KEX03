@@ -3,8 +3,9 @@ import { motion, useReducedMotion } from "framer-motion";
 import { AboutWidget } from "@/widgets/AboutWidget";
 import { DesktopFiles } from "@/widgets/DesktopFiles";
 import { GitHubWidget } from "@/widgets/GitHubWidget";
+import { HomeApps } from "@/widgets/HomeApps";
 import { ProfileWidget } from "@/widgets/ProfileWidget";
-import { StickyNote } from "@/widgets/StickyNote";
+import { NotesWidget } from "@/widgets/NotesWidget";
 
 export function HomePage() {
   const desktopRef = useRef<HTMLDivElement | null>(null);
@@ -29,9 +30,10 @@ export function HomePage() {
           <ProfileWidget />
           <GitHubWidget />
         </div>
+        <HomeApps />
         <div className="widget-col">
           <AboutWidget />
-          <StickyNote />
+          <NotesWidget />
         </div>
       </div>
       <DesktopFiles constraintsRef={desktopRef} />

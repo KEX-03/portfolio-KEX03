@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { FileText, Folder, X } from "lucide-react";
+import { FileText, Folder, Hand, X } from "lucide-react";
 import portrait from "@/assets/images/IMG_1897.jpeg";
 import avatar from "@/assets/images/IMG_4657.jpeg";
 import { SITE } from "@/data/site";
@@ -112,7 +112,11 @@ export function DesktopFiles({ constraintsRef }: DesktopFilesProps) {
             <span className="file-name">{file.name}</span>
           </motion.button>
         ))}
-        {canDrag ? <p className="drag-hint">psst… try dragging things ✦</p> : null}
+        {canDrag ? (
+          <p className="drag-hint">
+            <Hand size={12} strokeWidth={2.2} /> psst… try dragging things
+          </p>
+        ) : null}
       </div>
 
       <AnimatePresence>

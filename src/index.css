@@ -32,7 +32,7 @@
   --shadow-widget: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 20px 40px -24px rgba(0, 0, 0, 0.7);
   --font: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", ui-sans-serif, system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  --hand: "Caveat", "Comic Sans MS", cursive;
+  --notes-yellow: #ffd60a;
   --menubar-h: 30px;
   --dock-space: 104px;
   --safe-top: env(safe-area-inset-top, 0px);
@@ -59,6 +59,7 @@
   --text-2: #3a3a40;
   --muted: #6e6e76;
   --accent: #6c5cd6;
+  --notes-yellow: #e0a800;
   --shadow-window: 0 0 0 0.5px rgba(0, 0, 0, 0.12), 0 30px 80px -24px rgba(40, 30, 90, 0.35), 0 10px 24px -12px rgba(40, 30, 90, 0.2);
   --shadow-widget: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 20px 40px -26px rgba(40, 30, 90, 0.35);
 }
@@ -173,7 +174,6 @@ button {
   font-size: 13px;
   background: var(--glass);
   backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
   border-bottom: 0.5px solid var(--glass-line);
 }
 
@@ -276,7 +276,6 @@ button {
   border-radius: 22px;
   background: var(--glass);
   backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
   border: 0.5px solid var(--glass-line);
   box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.55);
 }
@@ -507,6 +506,10 @@ button {
 
 .desktop {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 124px;
   min-height: calc(100dvh - var(--menubar-h) - var(--safe-top) - 22px - var(--dock-space) - var(--safe-bottom));
 }
 
@@ -526,7 +529,6 @@ button {
 .widget {
   background: var(--glass);
   backdrop-filter: blur(30px) saturate(180%);
-  -webkit-backdrop-filter: blur(30px) saturate(180%);
   border: 0.5px solid var(--glass-line);
   border-radius: 22px;
   padding: 18px;
@@ -686,40 +688,87 @@ button {
   color: var(--text-2);
 }
 
-/* Sticky note */
-.sticky-note {
-  justify-self: start;
-  width: 270px;
-  padding: 16px 18px 18px;
-  background: linear-gradient(180deg, #fff3a6, #ffe680);
-  color: #3b3415;
-  border-radius: 4px 4px 4px 18px;
-  transform: rotate(-2deg);
-  box-shadow: 0 18px 30px -18px rgba(0, 0, 0, 0.6);
-  font-family: var(--hand);
-  transition: transform 0.25s ease;
+/* Notes widget (macOS Notes) */
+.notes-widget {
+  padding: 16px 18px 14px;
 }
 
-.sticky-note:hover {
-  transform: rotate(0deg) translateY(-2px);
+.notes-app {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--notes-yellow);
 }
 
-.sticky-head {
-  margin: 0 0 4px;
-  font-size: 24px;
+.notes-title {
+  margin: 8px 0 0;
+  font-size: 15px;
   font-weight: 700;
 }
 
-.sticky-note ul {
-  margin: 0;
-  padding-left: 18px;
-  list-style: disc;
-  font-size: 21px;
-  line-height: 1.2;
+.notes-date {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--muted);
 }
 
-.sticky-note li + li {
-  margin-top: 4px;
+.notes-checklist {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.notes-checklist li + li {
+  border-top: 0.5px solid var(--glass-line);
+}
+
+.notes-checklist button {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 7px 0;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font-size: 13.5px;
+  line-height: 1.4;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.notes-check {
+  position: relative;
+  flex: 0 0 auto;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in oklab, var(--text) 35%, transparent);
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.notes-checklist .is-done .notes-check {
+  background: var(--notes-yellow);
+  border-color: var(--notes-yellow);
+}
+
+.notes-checklist .is-done .notes-check::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.notes-checklist .is-done .notes-text {
+  color: var(--muted);
 }
 
 /* GitHub widget */
@@ -938,15 +987,20 @@ button {
 }
 
 .drag-hint {
-  margin: 6px 0 0;
-  width: 140px;
-  text-align: center;
-  font-family: var(--hand);
-  font-size: 19px;
-  line-height: 1.1;
-  color: color-mix(in oklab, #fff 80%, transparent);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  transform: rotate(-4deg);
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 8px 0 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+  color: var(--text-2);
+  background: var(--glass);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 0.5px solid var(--glass-line);
 }
 
 :root[data-theme="light"] .file-name {
@@ -958,9 +1012,9 @@ button {
   color: #fff;
 }
 
-:root[data-theme="light"] .drag-hint {
-  color: color-mix(in oklab, var(--text) 70%, transparent);
-  text-shadow: none;
+/* iOS home-screen apps: phones only */
+.ios-apps {
+  display: none;
 }
 
 /* Quick Look */
@@ -1935,22 +1989,27 @@ button {
 
 @media (max-width: 1180px) {
   .desktop-widgets {
-    grid-template-columns: 320px minmax(0, 1fr);
-    margin-right: 120px;
+    grid-template-columns: 300px minmax(0, 1fr);
   }
 }
 
 @media (max-width: 1023px) {
+  .desktop {
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 0;
+  }
+
   .desktop-widgets {
     grid-template-columns: 1fr;
+    width: 100%;
     max-width: 600px;
-    margin: 0 auto;
   }
 
   .desktop-files {
     position: static;
     display: grid;
-    width: auto;
+    width: 100%;
     max-width: 600px;
     margin: 20px auto 0;
     grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
@@ -1959,10 +2018,6 @@ button {
   .desktop-file {
     width: 84px;
     touch-action: auto;
-  }
-
-  .sticky-note {
-    justify-self: center;
   }
 
   .store-features {
@@ -1982,83 +2037,251 @@ button {
   }
 }
 
-/* iOS "Springboard" */
+/* ============================================================
+   iOS (phones): home screen, dock, full-screen apps
+   ============================================================ */
+
 @media (max-width: 768px) {
   :root {
-    --menubar-h: 34px;
-    --dock-space: 96px;
+    --dock-space: 112px;
   }
 
-  .desktop-main {
-    padding-left: max(16px, var(--safe-left));
-    padding-right: max(16px, var(--safe-right));
-    padding-top: calc(var(--menubar-h) + var(--safe-top) + 14px);
-  }
-
+  /* Safari already shows the real iOS status bar, so no menu bar here. */
   .menubar {
-    font-size: 14px;
-  }
-
-  .menubar-day,
-  .menubar-app {
     display: none;
   }
 
-  .menubar-right .menubar-icon:not(button) {
+  .desktop-main {
+    padding: calc(var(--safe-top) + 18px) max(16px, var(--safe-right)) calc(var(--dock-space) + var(--safe-bottom)) max(16px, var(--safe-left));
+  }
+
+  /* Home screen */
+  .desktop {
+    display: block;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .desktop-widgets {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .widget-col {
+    display: contents;
+  }
+
+  .profile-widget {
+    order: 1;
+  }
+
+  .ios-apps {
+    order: 2;
+  }
+
+  .gh-widget {
+    order: 3;
+  }
+
+  .notes-widget {
+    order: 4;
+  }
+
+  .about-widget {
+    order: 5;
+  }
+
+  .desktop-files {
     display: none;
   }
 
   .widget {
-    border-radius: 24px;
+    border-radius: 22px;
+    padding: 16px;
   }
 
   .about-cards {
     grid-template-columns: 1fr;
   }
 
-  .sticky-note {
-    width: 100%;
-    transform: rotate(-1deg);
-  }
-
-  .desktop-files {
+  .ios-apps {
+    display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 14px 6px;
+    gap: 18px 8px;
+    padding: 4px 2px;
   }
 
-  .desktop-file {
+  .ios-app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ios-icon {
+    display: grid;
+    place-items: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 14px;
+    color: #fff;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset, 0 6px 14px -8px rgba(0, 0, 0, 0.6);
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+
+  .ios-icon > svg {
+    width: 52%;
+    height: 52%;
+  }
+
+  .ios-app:active .ios-icon {
+    transform: scale(0.9);
+    filter: brightness(0.85);
+  }
+
+  .ios-app-label {
+    max-width: 76px;
+    font-size: 11px;
+    font-weight: 500;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :root[data-theme="light"] .ios-app-label {
+    color: var(--text);
+    text-shadow: none;
+  }
+
+  .t-github {
+    background: linear-gradient(160deg, #3a3f47, #15181d);
+  }
+
+  .t-linkedin {
+    background: linear-gradient(160deg, #2a8ae0, #0a66c2);
+  }
+
+  .t-settings {
+    background: linear-gradient(160deg, #d1d1d6, #8e8e93);
+    color: #3a3a3c;
+  }
+
+  /* Light tiles keep their coloured glyphs. */
+  .ios-icon.t-resume {
+    color: var(--red);
+  }
+
+  /* iOS dock: four apps, no labels or running dots */
+  .dock-wrap {
+    bottom: calc(8px + var(--safe-bottom));
+    padding: 0 10px;
+  }
+
+  .dock {
+    background: color-mix(in oklab, var(--window) 90%, transparent);
+    backdrop-filter: blur(40px) saturate(180%);
+    width: min(100%, 420px);
+    justify-content: space-around;
+    gap: 0;
+    padding: 12px 14px;
+    border-radius: 34px;
+  }
+
+  .dock .dock-tile {
+    width: 60px !important;
+    height: 60px !important;
+    border-radius: 14px;
+  }
+
+  .dock-item.desktop-only,
+  .dock-sep,
+  .dock-dot,
+  .dock-label {
+    display: none;
+  }
+
+  /* Apps open full-screen and hide the dock, like iOS */
+  .desktop-shell.is-app .dock-wrap {
+    display: none;
+  }
+
+  .window,
+  .window.is-max,
+  .window-small,
+  .window-loading {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
     width: 100%;
+    height: auto;
+    min-height: 0;
+    margin: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding-top: var(--safe-top);
   }
 
-  .window {
-    height: calc(100dvh - var(--menubar-h) - var(--safe-top) - 14px - var(--dock-space) - var(--safe-bottom));
-    border-radius: 18px;
+  /* iOS home indicator */
+  .window::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    bottom: calc(8px + var(--safe-bottom));
+    width: 134px;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--text);
+    opacity: 0.35;
+    transform: translateX(-50%);
+    pointer-events: none;
   }
 
-  .traffic {
+  .window-terminal::after {
+    background: #e6e6ea;
+  }
+
+  .window-bar {
+    height: 44px;
+    padding: 0 10px 0 4px;
+    background: color-mix(in oklab, var(--window) 80%, transparent);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+
+  .traffic,
+  .window-title {
     display: none;
   }
 
   .window-back {
     display: inline-flex;
+    font-size: 17px;
   }
 
-  .window-title {
-    display: none;
+  .window-body {
+    padding-bottom: calc(26px + var(--safe-bottom));
   }
 
-  .window-bar {
-    height: 48px;
-  }
-
+  /* App content */
   .store,
   .cal {
-    padding: 18px 16px 28px;
+    padding: 14px 16px 28px;
   }
 
   .store-head h2,
   .cal-head h2 {
-    font-size: 26px;
+    font-size: 32px;
   }
 
   .store-side {
@@ -2145,24 +2368,9 @@ button {
   .term-commit {
     grid-column: 1 / -1;
   }
-
-  .dock {
-    gap: 12px;
-    padding: 8px 12px;
-    border-radius: 28px;
-  }
-
-  .dock-label {
-    display: none;
-  }
 }
 
 @media (max-width: 520px) {
-  .dock-sep,
-  .dock-item:nth-last-child(-n + 2) {
-    display: none;
-  }
-
   .profile-widget {
     grid-template-columns: 96px 1fr;
     gap: 14px;
@@ -2183,6 +2391,14 @@ button {
 
   .store-row-tagline {
     white-space: normal;
+  }
+}
+
+@media (max-width: 360px) {
+  .ios-icon,
+  .dock .dock-tile {
+    width: 54px !important;
+    height: 54px !important;
   }
 }
 

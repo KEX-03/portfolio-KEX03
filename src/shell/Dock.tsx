@@ -30,9 +30,11 @@ type DockItemProps = {
   to?: string;
   href?: string;
   external?: boolean;
+  /** Hidden on phones, where the iOS dock only holds four apps. */
+  desktopOnly?: boolean;
 };
 
-function DockItem({ mouseX, label, tile, children, to, href, external }: DockItemProps) {
+function DockItem({ mouseX, label, tile, children, to, href, external, desktopOnly }: DockItemProps) {
   const ref = useRef<HTMLDivElement | null>(null);
   const reduce = useReducedMotion();
   const { pathname } = useLocation();
@@ -55,7 +57,7 @@ function DockItem({ mouseX, label, tile, children, to, href, external }: DockIte
   );
 
   return (
-    <li className={`dock-item${isActive ? " is-active" : ""}`}>
+    <li className={`dock-item${isActive ? " is-active" : ""}${desktopOnly ? " desktop-only" : ""}`}>
       {to !== undefined ? (
         <NavLink to={to} aria-label={label} end={to === "/"}>
           {icon}
@@ -79,7 +81,7 @@ export function Dock() {
   return (
     <nav className="dock-wrap" aria-label="Dock">
       <ul className="dock" onMouseMove={(e) => mouseX.set(e.clientX)} onMouseLeave={() => mouseX.set(Number.POSITIVE_INFINITY)}>
-        <DockItem mouseX={mouseX} label="Home" tile="t-finder" to="/">
+        <DockItem mouseX={mouseX} label="Home" tile="t-finder" to="/" desktopOnly>
           <Smile strokeWidth={1.8} />
         </DockItem>
         <DockItem mouseX={mouseX} label="Projects" tile="t-store" to="/projects">
@@ -92,7 +94,7 @@ export function Dock() {
           <Terminal strokeWidth={2} />
         </DockItem>
         <li className="dock-sep" aria-hidden="true" />
-        <DockItem mouseX={mouseX} label="Résumé" tile="t-resume" href={SITE.resume} external>
+        <DockItem mouseX={mouseX} label="Résumé" tile="t-resume" href={SITE.resume} external desktopOnly>
           <FileText strokeWidth={1.8} />
         </DockItem>
         <DockItem mouseX={mouseX} label="Mail" tile="t-mail" href={`mailto:${SITE.email}`}>

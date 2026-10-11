@@ -29,8 +29,11 @@ export function DesktopRoutes() {
 }
 
 export function DesktopShell() {
+  const { pathname } = useLocation();
+
   return (
-    <div className="desktop-shell">
+    // "is-app" lets phones hide the dock while an app is open, like iOS.
+    <div className={`desktop-shell${pathname === "/" ? "" : " is-app"}`}>
       <div className="wallpaper" aria-hidden="true" />
       <MenuBar />
       <main className="desktop-main">
