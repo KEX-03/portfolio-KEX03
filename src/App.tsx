@@ -1,37 +1,51 @@
-import { useEffect, useState } from "react";
-import { PortfolioPage } from "@/pages/PortfolioPage";
+import { lazy, Suspense } from "react";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
+import { MenuBar } from "@/shell/MenuBar";
+import { Dock } from "@/shell/Dock";
+import { HomePage } from "@/pages/HomePage";
+import { NotFoundPage } from "@/pages/NotFoundPage";
 
-function App() {
-  const [ready, setReady] = useState(false);
+const ProjectsPage = lazy(() => import("@/pages/ProjectsPage").then((m) => ({ default: m.ProjectsPage })));
+const ExperiencePage = lazy(() => import("@/pages/ExperiencePage").then((m) => ({ default: m.ExperiencePage })));
+const OpenSourcePage = lazy(() => import("@/pages/OpenSourcePage").then((m) => ({ default: m.OpenSourcePage })));
 
-  useEffect(() => {
-    let timer = 0;
-    const markReady = () => {
-      timer = window.setTimeout(() => setReady(true), 250);
-    };
-
-    if (document.readyState === "complete") {
-      markReady();
-    } else {
-      window.addEventListener("load", markReady, { once: true });
-    }
-
-    return () => {
-      window.removeEventListener("load", markReady);
-      window.clearTimeout(timer);
-    };
-  }, []);
+export function DesktopRoutes() {
+  const location = useLocation();
 
   return (
-    <>
-      <div className={`app-loader${ready ? " is-hidden" : ""}`} aria-hidden={ready}>
-        <div className="app-loader-mark">vs</div>
-        <p>Loading portfolio...</p>
-      </div>
-      <div className={`app-shell${ready ? " is-ready" : ""}`}>
-        <PortfolioPage />
-      </div>
-    </>
+    <AnimatePresence mode="wait">
+      <Suspense fallback={<div className="window-loading" aria-hidden="true" />}>
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/projects" element={<ProjectsPage />} />
+          <Route path="/experience" element={<ExperiencePage />} />
+          <Route path="/open-source" element={<OpenSourcePage />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
+    </AnimatePresence>
+  );
+}
+
+export function DesktopShell() {
+  return (
+    <div className="desktop-shell">
+      <div className="wallpaper" aria-hidden="true" />
+      <MenuBar />
+      <main className="desktop-main">
+        <DesktopRoutes />
+      </main>
+      <Dock />
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <DesktopShell />
+    </BrowserRouter>
   );
 }
 

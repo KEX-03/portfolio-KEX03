@@ -3,6 +3,10 @@ export type ExperienceItem = {
   company: string;
   period: string;
   location: string;
+  start: string;
+  end?: string;
+  url?: string;
+  color: string;
   current?: boolean;
   summary: string;
   highlights: { lead: string; rest: string }[];
@@ -15,6 +19,9 @@ export const EXPERIENCE: ExperienceItem[] = [
     company: "Fyn Mobility",
     period: "May 2026 – Present",
     location: "Bengaluru, India",
+    start: "2026-05",
+    url: "https://www.fynmobility.com/",
+    color: "#0a84ff",
     current: true,
     summary: "Shipping Infynity's web presence and the SDK integrations, attribution, and notifications behind its mobile app.",
     highlights: [
@@ -30,6 +37,9 @@ export const EXPERIENCE: ExperienceItem[] = [
     company: "Red Tree India",
     period: "Aug 2025 – Mar 2026",
     location: "Remote",
+    start: "2025-08",
+    end: "2026-03",
+    color: "#ff9f0a",
     summary: "Owned features in a React + TypeScript frontend from design handoff all the way to production.",
     highlights: [
       { lead: "Delivered 10+ customer-facing features", rest: " end-to-end in an Agile workflow, from design handoff to production." },
@@ -43,6 +53,9 @@ export const EXPERIENCE: ExperienceItem[] = [
     company: "AICTE-Eduskills",
     period: "Jan – Apr 2025",
     location: "Remote",
+    start: "2025-01",
+    end: "2025-04",
+    color: "#30d158",
     summary: "Turned Figma prototypes into responsive, accessible layouts.",
     highlights: [
       { lead: "Delivered 8+ responsive, accessible web layouts", rest: " using HTML5, CSS3, and Tailwind CSS; translated Figma prototypes into pixel-accurate UI components." },

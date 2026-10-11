@@ -19,3 +19,18 @@ Object.defineProperty(globalThis, 'IntersectionObserver', {
   configurable: true,
   value: MockIntersectionObserver,
 });
+
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  configurable: true,
+  value: (query: string): MediaQueryList => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    addListener: () => {},
+    removeListener: () => {},
+    dispatchEvent: () => false,
+  }),
+});

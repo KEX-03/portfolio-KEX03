@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="paper">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content="Vivek Sharma - Software Engineer at Fyn Mobility. React, Next.js, React Native, and TypeScript, plus open-source work on react-big-schedule." />
@@ -9,7 +9,7 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/favicon.svg" />
     <link rel="canonical" href="https://portfolio-kex03.vercel.app/" />
-    <meta name="theme-color" content="#f1ebdd" />
+    <meta name="theme-color" content="#141218" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Vivek Sharma - Software Engineer" />
@@ -22,11 +22,13 @@
     <meta name="twitter:image" content="https://portfolio-kex03.vercel.app/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Caveat:wght@500;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-    />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Caveat:wght@500;700&display=swap" />
     <title>Vivek Sharma - Software Engineer</title>
+    <script>
+      try {
+        if (localStorage.getItem("kex03-theme") === "light") document.documentElement.setAttribute("data-theme", "light");
+      } catch (e) {}
+    </script>
   </head>
   <body>
     <div id="root"></div>
