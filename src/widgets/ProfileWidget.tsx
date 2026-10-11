@@ -1,5 +1,5 @@
 import { MapPin } from "lucide-react";
-import portrait from "@/assets/images/portrait.jpeg";
+import portrait from "@/assets/images/portrait.webp";
 import { GitHubIcon, LinkedInIcon } from "@/components/BrandIcons";
 import { SITE } from "@/data/site";
 

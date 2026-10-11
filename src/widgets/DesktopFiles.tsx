@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState, type RefObject } from "react"
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FileText, Folder, X } from "lucide-react";
-import portrait from "@/assets/images/portrait.jpeg";
-import avatar from "@/assets/images/avatar.jpeg";
+import portrait from "@/assets/images/portrait.webp";
+import avatar from "@/assets/images/avatar.webp";
 import { SITE } from "@/data/site";
 import { DragTip } from "./DragTip";
 
