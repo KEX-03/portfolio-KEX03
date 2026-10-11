@@ -283,7 +283,7 @@ export function ProjectsSection() {
           <span>Featured Projects</span>
         </div>
         <div className="projects-head-right">
-          <a className="view-all" href="#" data-cursor="hover">
+          <a className="view-all" href="https://github.com/KEX-03?tab=repositories" target="_blank" rel="noopener noreferrer" data-cursor="hover">
             View all projects -&gt;
           </a>
           <div className="pager">

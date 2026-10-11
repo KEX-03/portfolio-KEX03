@@ -3,26 +3,28 @@ import heroPortrait from "@/assets/images/IMG_1897.jpeg";
 
 const NAV_ITEMS = [
   { label: "Home", href: "#home" },
-  { label: "Skills", href: "#skills" },
+  { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
-  { label: "Process", href: "#process" },
+  { label: "Open Source", href: "#open-source" },
+  { label: "About", href: "#about" },
 ];
 
 const ROLES = [
-  "React + TypeScript",
-  "design systems",
-  "tiny delightful UIs",
-  "performance work",
-  "accessibility",
-  "motion + interaction",
+  "Next.js websites",
+  "React Native SDK integrations",
+  "render performance fixes",
+  "open-source PRs",
+  "accessible interfaces",
+  "push + deep links",
 ];
 
 const CODE_LINES = [
   '<span class="k">const</span> <span class="f">engineer</span> = {',
   '  name: <span class="s">"Vivek Sharma"</span>,',
-  '  role: <span class="s">"Frontend Engineer"</span>,',
-  '  stack: [<span class="s">"React"</span>, <span class="s">"TS"</span>, <span class="s">"Motion"</span>],',
-  '  craft: <span class="s">"clean · fast · accessible"</span>,',
+  '  role: <span class="s">"Software Engineer"</span>,',
+  '  at: <span class="s">"Fyn Mobility"</span>,',
+  '  stack: [<span class="s">"React"</span>, <span class="s">"Next.js"</span>, <span class="s">"RN"</span>, <span class="s">"TS"</span>],',
+  '  oss: <span class="s">"react-big-schedule"</span>,',
   "};",
   "",
   '<span class="c">console</span>.<span class="f">log</span>(engineer);',
@@ -167,16 +169,31 @@ export function HeroSection() {
           </svg>
 
           <div className="role-line">
-            <span className="role">&lt;&nbsp;Frontend Engineer&nbsp;/&gt;</span>
+            <span className="role">&lt;&nbsp;Software Engineer&nbsp;/&gt;</span>
             <span className="div" />
             <span className="role-rotator">
               currently shipping <span className={roleClass}>{roleText}</span>
             </span>
           </div>
           <p className="blurb">
-            I build interfaces that feel fast and look considered — from messy whiteboard sketches all the way to production. Strong opinions about motion, accessibility,
-            and the boring stuff that makes things actually work.
+            Frontend-focused engineer building fast, considered web and mobile apps with React, Next.js, React Native, and TypeScript. Currently at{" "}
+            <strong>Fyn Mobility</strong>, shipping Infynity&apos;s website and the SDK integrations behind its app. Off the clock, you&apos;ll find me happily
+            poking around open-source codebases and fixing the bugs I stumble into.
           </p>
+          <ul className="hero-facts" aria-label="A little about me">
+            <li>
+              <span className="hf-n" aria-hidden="true">✦</span>
+              <span className="hf-l">happiest when building things</span>
+            </li>
+            <li>
+              <span className="hf-n" aria-hidden="true">♡</span>
+              <span className="hf-l">open source is my happy place</span>
+            </li>
+            <li>
+              <span className="hf-n" aria-hidden="true">☕</span>
+              <span className="hf-l">always learning something new</span>
+            </li>
+          </ul>
           <div className="hero-cta">
             <button className="btn-primary" id="ctaWork" data-magnet data-cursor="hover" onClick={() => document.getElementById("projects")?.scrollIntoView({ behavior: "smooth" })}>
               View My Work

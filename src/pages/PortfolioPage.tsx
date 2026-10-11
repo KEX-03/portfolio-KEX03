@@ -1,5 +1,7 @@
 import { lazy, Suspense } from "react";
 import { HeroSection } from "@/sections/HeroSection";
+import { ExperienceSection } from "@/sections/ExperienceSection";
+import { OpenSourceSection } from "@/sections/OpenSourceSection";
 import { ContactProcessSection } from "@/sections/ContactProcessSection";
 import { usePortfolioInteractions } from "@/hooks/usePortfolioInteractions";
 
@@ -23,8 +25,12 @@ export function PortfolioPage() {
         <HeroSection />
         <Suspense fallback={<SectionFallback />}>
           <TechStackSection />
+        </Suspense>
+        <ExperienceSection />
+        <Suspense fallback={<SectionFallback />}>
           <ProjectsSection />
         </Suspense>
+        <OpenSourceSection />
         <ContactProcessSection />
       </main>
     </>

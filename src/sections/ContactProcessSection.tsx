@@ -14,8 +14,11 @@ export function ContactProcessSection() {
           </div>
           <div>
             <h3>About Me</h3>
-            <p>Self-taught engineer who loves polished UI, prototyping in the browser, and the small details - kerning a label, easing a transition, getting a focus ring just right.</p>
-            <p>Off-keyboard: sketching, long walks, and feeding my coffee habit.</p>
+            <p>
+              BCA graduate from Chandigarh University, now a Software Engineer at Fyn Mobility. I care about what happens under the hood: render performance, accessibility,
+              and architecture that holds up as a product grows, not just interfaces that look good.
+            </p>
+            <p>Open source is where I&apos;ve learned the most: reading unfamiliar code and shipping changes other people depend on.</p>
             <div className="quote">Let&apos;s build something meaningful.</div>
           </div>
         </div>
@@ -88,7 +91,7 @@ export function ContactProcessSection() {
                 <path d="m3 7 9 7 9-7" />
               </svg>
             </span>
-            viveksharma03@yahoo.com
+            <a href="mailto:viveksharma03@yahoo.com" data-cursor="hover">viveksharma03@yahoo.com</a>
           </div>
           <div className="info-line">
             <span className="ic">
@@ -112,7 +115,7 @@ export function ContactProcessSection() {
                 <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.86-3.04-1.86 0-2.15 1.45-2.15 2.95v5.66H9.34V9h3.41v1.56h.05c.48-.9 1.64-1.86 3.38-1.86 3.62 0 4.29 2.38 4.29 5.48v6.27ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.23 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.21 0 22.23 0Z" />
               </svg>
             </a>
-            <a href="/Resume_Vivek.pdf" data-cursor="hover" aria-label="Read CV" target="_blank" rel="noopener noreferrer">
+            <a href={`${import.meta.env.BASE_URL}Resume_Vivek.pdf`} data-cursor="hover" aria-label="Read CV" target="_blank" rel="noopener noreferrer">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <rect x="3" y="3" width="18" height="18" rx="3" />
                 <path d="M8 8h8M8 12h8M8 16h5" />
@@ -133,7 +136,7 @@ export function ContactProcessSection() {
       <footer>
         <span>© 2026 Vivek Sharma · Crafted with care.</span>
         <span className="now">
-          <span className="blip" /> Now: building something with Framer Motion
+          <span className="blip" /> Now: shipping Infynity at Fyn Mobility
         </span>
       </footer>
     </>
