@@ -3,31 +3,14 @@ import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Smile, X } from "lucide-react";
 
-/** Set for good once the visitor has dragged a file: they know, no need to tell them again. */
-const LEARNED_KEY = "kex03-drag-tip-learned";
-/** Set per tab once a tip has been shown, so coming back to Home doesn't pop it again. */
-const SHOWN_KEY = "kex03-home-tip-shown";
 const SHOW_AFTER_MS = 1600;
 const AUTO_HIDE_MS = 7000;
 
-function readFlag(storage: () => Storage, key: string) {
-  try {
-    return storage().getItem(key) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function setFlag(storage: () => Storage, key: string) {
-  try {
-    storage().setItem(key, "1");
-  } catch {
-    // Without storage the tip may show again, which is harmless.
-  }
-}
-
-const local = () => window.localStorage;
-const session = () => window.sessionStorage;
+/**
+ * Kept in memory rather than storage: every page load shows the tip again, but going
+ * back to Home within the app doesn't pop it a second time.
+ */
+let shownThisLoad = false;
 
 function usePageVisible() {
   const [visible, setVisible] = useState(() => !document.hidden);
@@ -42,14 +25,14 @@ function usePageVisible() {
 /**
  * Shared timing for the home-screen tips: appears after a short delay once the tab is in
  * front of the visitor, auto-hides after a while (paused while `hold` is true), and only
- * shows once per tab session.
+ * shows once per page load.
  */
 function useTip({ suppressed, hold, onHide }: { suppressed: boolean; hold: boolean; onHide?: () => void }) {
   const [phase, setPhase] = useState<"waiting" | "showing" | "done">("waiting");
   const pageVisible = usePageVisible();
 
   useEffect(() => {
-    if (phase !== "waiting" || !pageVisible || suppressed || readFlag(session, SHOWN_KEY)) return;
+    if (phase !== "waiting" || !pageVisible || suppressed || shownThisLoad) return;
     const timer = window.setTimeout(() => setPhase("showing"), SHOW_AFTER_MS);
     return () => window.clearTimeout(timer);
   }, [phase, pageVisible, suppressed]);
@@ -57,7 +40,7 @@ function useTip({ suppressed, hold, onHide }: { suppressed: boolean; hold: boole
   const show = phase === "showing" && !suppressed;
 
   useEffect(() => {
-    if (show) setFlag(session, SHOWN_KEY);
+    if (show) shownThisLoad = true;
   }, [show]);
 
   useEffect(() => {
@@ -86,16 +69,11 @@ type DragTipProps = {
 
 /**
  * A macOS-style Finder notification pointing out that desktop files can be dragged.
- * Shows once per tab session, and never again once the visitor has dragged a file.
+ * Shows once per page load, and hides as soon as the visitor drags a file.
  */
 export function DragTip({ discovered, onDismiss }: DragTipProps) {
   const [hovered, setHovered] = useState(false);
-  const [learned] = useState(() => readFlag(local, LEARNED_KEY));
-  const { show, dismiss } = useTip({ suppressed: learned || discovered, hold: hovered, onHide: onDismiss });
-
-  useEffect(() => {
-    if (discovered) setFlag(local, LEARNED_KEY);
-  }, [discovered]);
+  const { show, dismiss } = useTip({ suppressed: discovered, hold: hovered, onHide: onDismiss });
 
   return createPortal(
     <AnimatePresence>

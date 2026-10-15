@@ -1,14 +1,19 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { DragTip, PhoneTip } from "@/widgets/DragTip";
+import type * as DragTipModule from "@/widgets/DragTip";
 
-const LEARNED_KEY = "kex03-drag-tip-learned";
-const SHOWN_KEY = "kex03-home-tip-shown";
+let DragTip: typeof DragTipModule.DragTip;
+let PhoneTip: typeof DragTipModule.PhoneTip;
+
+/** A fresh copy of the module, the same as the visitor reloading the page. */
+async function reloadPage() {
+  vi.resetModules();
+  ({ DragTip, PhoneTip } = await import("@/widgets/DragTip"));
+}
 
 describe("DragTip", () => {
-  beforeEach(() => {
-    localStorage.clear();
-    sessionStorage.clear();
+  beforeEach(async () => {
+    await reloadPage();
     vi.useFakeTimers();
   });
 
@@ -16,7 +21,7 @@ describe("DragTip", () => {
     vi.useRealTimers();
   });
 
-  it("appears after a short delay and only once per tab session", () => {
+  it("appears after a short delay, once per page load", async () => {
     const onDismiss = vi.fn();
     const { unmount } = render(<DragTip discovered={false} onDismiss={onDismiss} />);
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
@@ -28,14 +33,14 @@ describe("DragTip", () => {
     expect(onDismiss).toHaveBeenCalledTimes(1);
     unmount();
 
-    // Coming back to Home in the same tab doesn't pop it again...
+    // Coming back to Home without reloading doesn't pop it again...
     const second = render(<DragTip discovered={false} onDismiss={onDismiss} />);
     act(() => vi.advanceTimersByTime(3000));
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
     second.unmount();
 
-    // ...but a new visit does, since closing it isn't the same as learning to drag.
-    sessionStorage.clear();
+    // ...but a fresh page load does.
+    await reloadPage();
     render(<DragTip discovered={false} onDismiss={onDismiss} />);
     act(() => vi.advanceTimersByTime(1700));
     expect(screen.getByRole("status")).toBeInTheDocument();
@@ -47,7 +52,6 @@ describe("DragTip", () => {
     act(() => vi.advanceTimersByTime(1700));
     act(() => vi.advanceTimersByTime(7100));
     expect(onDismiss).toHaveBeenCalledTimes(1);
-    expect(sessionStorage.getItem(SHOWN_KEY)).toBe("1");
   });
 
   it("stays open while hovered", () => {
@@ -58,26 +62,19 @@ describe("DragTip", () => {
     expect(screen.getByRole("status")).toBeInTheDocument();
   });
 
-  it("hides for good, without the wiggle, once the visitor drags something", () => {
+  it("hides without the wiggle once the visitor drags something", () => {
     const onDismiss = vi.fn();
-    const { rerender, unmount } = render(<DragTip discovered={false} onDismiss={onDismiss} />);
+    const { rerender } = render(<DragTip discovered={false} onDismiss={onDismiss} />);
     act(() => vi.advanceTimersByTime(1700));
     rerender(<DragTip discovered onDismiss={onDismiss} />);
     act(() => vi.advanceTimersByTime(10000));
     expect(onDismiss).not.toHaveBeenCalled();
-    expect(localStorage.getItem(LEARNED_KEY)).toBe("1");
-    unmount();
-
-    sessionStorage.clear();
-    render(<DragTip discovered={false} onDismiss={onDismiss} />);
-    act(() => vi.advanceTimersByTime(3000));
-    expect(screen.queryByRole("status")).not.toBeInTheDocument();
   });
 });
 
 describe("PhoneTip", () => {
-  beforeEach(() => {
-    sessionStorage.clear();
+  beforeEach(async () => {
+    await reloadPage();
     vi.useFakeTimers();
   });
 
@@ -85,7 +82,7 @@ describe("PhoneTip", () => {
     vi.useRealTimers();
   });
 
-  it("drops in after a short delay, once per tab session", () => {
+  it("drops in after a short delay, once per page load", () => {
     const { unmount } = render(<PhoneTip />);
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
     act(() => vi.advanceTimersByTime(1700));
