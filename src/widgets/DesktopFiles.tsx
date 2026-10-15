@@ -5,7 +5,7 @@ import { FileText, Folder, X } from "lucide-react";
 import portrait from "@/assets/images/portrait.webp";
 import avatar from "@/assets/images/avatar.webp";
 import { SITE } from "@/data/site";
-import { DragTip } from "./DragTip";
+import { DragTip, PhoneTip } from "./DragTip";
 
 /**
  * Icons on the desktop. To add a photo, drop it in src/assets/images and add an
@@ -24,15 +24,15 @@ const FILES: DesktopFile[] = [
   { kind: "folder", name: "projects", href: "/projects" },
 ];
 
-function useCanDrag() {
-  const [canDrag, setCanDrag] = useState(() => window.matchMedia("(pointer: fine) and (min-width: 1024px)").matches);
+function useMediaQuery(query: string) {
+  const [matches, setMatches] = useState(() => window.matchMedia(query).matches);
   useEffect(() => {
-    const mq = window.matchMedia("(pointer: fine) and (min-width: 1024px)");
-    const onChange = () => setCanDrag(mq.matches);
+    const mq = window.matchMedia(query);
+    const onChange = () => setMatches(mq.matches);
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
-  }, []);
-  return canDrag;
+  }, [query]);
+  return matches;
 }
 
 function FileIcon({ file }: { file: DesktopFile }) {
@@ -62,7 +62,9 @@ type DesktopFilesProps = { constraintsRef: RefObject<HTMLElement | null> };
 
 export function DesktopFiles({ constraintsRef }: DesktopFilesProps) {
   const navigate = useNavigate();
-  const canDrag = useCanDrag();
+  const canDrag = useMediaQuery("(pointer: fine) and (min-width: 1024px)");
+  // Same breakpoint as the iOS home screen in index.css.
+  const isPhone = useMediaQuery("(max-width: 768px)");
   const [preview, setPreview] = useState<Extract<DesktopFile, { kind: "image" }> | null>(null);
   const [selected, setSelected] = useState<string | null>(null);
   const draggedRef = useRef(false);
@@ -129,6 +131,7 @@ export function DesktopFiles({ constraintsRef }: DesktopFilesProps) {
       </div>
 
       {canDrag ? <DragTip discovered={discovered} onDismiss={onTipDismiss} /> : null}
+      {isPhone ? <PhoneTip /> : null}
 
       <AnimatePresence>
         {preview ? (
